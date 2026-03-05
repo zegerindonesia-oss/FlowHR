@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authClient } from '../lib/auth-client';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -12,25 +13,25 @@ export default function Login() {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3001/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email.toLowerCase(), password })
+            // Helper to support the dummy UX (typing just 'admin' or 'employee')
+            const finalEmail = email.includes('@') ? email : `${email}@flowhr.com`;
+
+            const { data, error } = await authClient.signIn.email({
+                email: finalEmail.toLowerCase(),
+                password: password,
             });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                setError(data.error || 'Login failed');
+            if (error) {
+                setError(error.message || 'Login failed');
                 return;
             }
 
-            // Save session
-            localStorage.setItem('userRole', data.user.role);
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.user.id);
-
-            navigate('/');
+            if (data?.user) {
+                // Save session role
+                localStorage.setItem('userRole', (data.user as any).role || 'employee');
+                localStorage.setItem('userId', data.user.id);
+                navigate('/');
+            }
         } catch (err) {
             setError('Unable to connect to server. Please try again later.');
             console.error(err);
