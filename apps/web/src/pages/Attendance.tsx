@@ -6,9 +6,74 @@ const logs = [
     { name: 'Emily Davis', dept: 'Support', shift: 'Afternoon (13:00-21:00)', clockIn: '--:--', clockOut: '--:--', status: 'Pending', color: 'slate' },
     { name: 'Robert Brown', dept: 'Operations', shift: 'Morning (09:00-17:00)', clockIn: '09:05 AM', clockOut: '--:--', status: 'Late', color: 'amber' },
 ]
+
+const employeeLogs = [
+    { date: 'Oct 15, 2024', shift: 'Morning', clockIn: '08:45 AM', clockOut: '05:05 PM', status: 'On Time', color: 'emerald' },
+    { date: 'Oct 14, 2024', shift: 'Morning', clockIn: '09:15 AM', clockOut: '05:10 PM', status: 'Late', color: 'amber' },
+    { date: 'Oct 13, 2024', shift: 'Morning', clockIn: '--:--', clockOut: '--:--', status: 'Absent', color: 'rose' },
+    { date: 'Oct 12, 2024', shift: 'Morning', clockIn: '08:50 AM', clockOut: '05:00 PM', status: 'On Time', color: 'emerald' },
+    { date: 'Oct 11, 2024', shift: 'Morning', clockIn: '08:55 AM', clockOut: '05:02 PM', status: 'On Time', color: 'emerald' },
+]
+
 const sc: Record<string, string> = { emerald: 'bg-emerald-100/60 text-emerald-600', amber: 'bg-amber-100/60 text-amber-600', rose: 'bg-rose-100/60 text-rose-600', slate: 'bg-slate-100/60 text-slate-500' }
 
 export default function Attendance() {
+    const userRole = localStorage.getItem('userRole');
+    const isAdmin = userRole === 'admin';
+
+    if (!isAdmin) {
+        return (
+            <div className="flex flex-col gap-6 animate-in fade-in duration-500 pb-8">
+                <div className="mb-2">
+                    <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">My Attendance</h1>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1">October 2024</p>
+                </div>
+
+                {/* Summary Cards */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <span className="material-symbols-outlined text-emerald-500 mb-2 bg-emerald-50 w-10 h-10 flex items-center justify-center rounded-xl">check_circle</span>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Present</p>
+                        <p className="text-2xl font-extrabold text-slate-800">18</p>
+                    </div>
+                    <div className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <span className="material-symbols-outlined text-amber-500 mb-2 bg-amber-50 w-10 h-10 flex items-center justify-center rounded-xl">schedule</span>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Late</p>
+                        <p className="text-2xl font-extrabold text-slate-800">2</p>
+                    </div>
+                </div>
+
+                {/* Attendance History */}
+                <div>
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-widest px-2 mb-4">Recent History</h3>
+                    <div className="glass-card rounded-3xl overflow-hidden p-2 space-y-2">
+                        {employeeLogs.map((log, i) => (
+                            <div key={i} className="flex flex-col p-4 bg-white/40 rounded-2xl border border-white/60">
+                                <div className="flex items-center justify-between mb-3 border-b border-slate-200/50 pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+                                        <span className="text-sm font-bold text-slate-700">{log.date}</span>
+                                    </div>
+                                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${sc[log.color]}`}>{log.status}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase">Clock In</span>
+                                        <span className="text-sm font-extrabold text-slate-800">{log.clockIn}</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase">Clock Out</span>
+                                        <span className="text-sm font-extrabold text-slate-800">{log.clockOut}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className="flex items-center justify-between mb-6">
