@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
     const userRole = localStorage.getItem('userRole');
@@ -40,8 +41,24 @@ export default function Dashboard() {
                     </button>
                 </div>
 
+                {/* Quick Access Grid */}
+                <div className="grid grid-cols-3 gap-3">
+                    <Link to="/leave-request" className="glass-card p-3 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/40 active:scale-95 transition-all">
+                        <span className="material-symbols-outlined text-orange-500 mb-1 bg-orange-50 w-10 h-10 flex items-center justify-center rounded-xl">flight_takeoff</span>
+                        <p className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Leave</p>
+                    </Link>
+                    <Link to="/schedule" className="glass-card p-3 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/40 active:scale-95 transition-all">
+                        <span className="material-symbols-outlined text-purple-500 mb-1 bg-purple-50 w-10 h-10 flex items-center justify-center rounded-xl">calendar_month</span>
+                        <p className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Schedule</p>
+                    </Link>
+                    <Link to="/payslips" className="glass-card p-3 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/40 active:scale-95 transition-all">
+                        <span className="material-symbols-outlined text-emerald-500 mb-1 bg-emerald-50 w-10 h-10 flex items-center justify-center rounded-xl">payments</span>
+                        <p className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Payslip</p>
+                    </Link>
+                </div>
+
                 {/* Status Cards */}
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-2 gap-4">
                     <div className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center">
                         <span className="material-symbols-outlined text-emerald-500 mb-2 bg-emerald-50 w-10 h-10 flex items-center justify-center rounded-xl">schedule</span>
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Shift Start</p>

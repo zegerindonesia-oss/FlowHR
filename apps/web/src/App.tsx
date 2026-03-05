@@ -10,6 +10,12 @@ import Settings from './pages/Settings'
 import Support from './pages/Support'
 import Login from './pages/Login'
 
+// Employee Mobile Pages
+import Profile from './pages/employee/Profile'
+import LeaveRequest from './pages/employee/LeaveRequest'
+import Schedule from './pages/employee/Schedule'
+import Payslip from './pages/employee/Payslip'
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +30,12 @@ function App() {
           <Route path="/messages" element={<Messages />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/support" element={<Support />} />
+
+          {/* Employee Mobile Routes */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/leave-request" element={<LeaveRequest />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/payslips" element={<Payslip />} />
         </Route>
       </Routes>
     </BrowserRouter>
