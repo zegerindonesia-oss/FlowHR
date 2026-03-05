@@ -8,11 +8,13 @@ import Reports from './pages/Reports'
 import Messages from './pages/Messages'
 import Settings from './pages/Settings'
 import Support from './pages/Support'
+import Login from './pages/Login'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/employees" element={<Employees />} />
