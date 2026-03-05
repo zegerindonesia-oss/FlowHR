@@ -1,4 +1,9 @@
+import { useState } from 'react';
+
 export default function Schedule() {
+    const [alarmEnabled, setAlarmEnabled] = useState(false);
+    const [alarmTime, setAlarmTime] = useState('60');
+
     return (
         <div className="flex flex-col gap-6 animate-in fade-in duration-500">
             <div className="mb-2">
@@ -18,8 +23,8 @@ export default function Schedule() {
                     <button
                         key={i}
                         className={`flex flex-col items-center justify-center w-14 h-16 rounded-xl transition-all ${d.active
-                                ? 'bg-gradient-to-b from-primary to-accent text-white shadow-lg shadow-primary/30 scale-105'
-                                : 'text-slate-500 hover:bg-white/60'
+                            ? 'bg-gradient-to-b from-primary to-accent text-white shadow-lg shadow-primary/30 scale-105'
+                            : 'text-slate-500 hover:bg-white/60'
                             }`}
                     >
                         <span className={`text-[10px] font-bold uppercase ${d.active ? 'text-white/90' : 'text-slate-400'}`}>{d.day}</span>
@@ -81,6 +86,41 @@ export default function Schedule() {
                         <p className="text-sm font-bold text-slate-700">Main Tech Office</p>
                         <p className="text-xs text-slate-500">Floor 4, Workstation B-12</p>
                     </div>
+                </div>
+            </div>
+
+            {/* Alarm / Reminder Setting */}
+            <div className="glass-card p-4 rounded-2xl flex items-center justify-between border border-white/60 mt-2 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors shadow-sm ${alarmEnabled ? 'bg-gradient-to-br from-primary to-accent text-white' : 'bg-slate-100 text-slate-400'}`}>
+                        <span className="material-symbols-outlined">{alarmEnabled ? 'notifications_active' : 'notifications_off'}</span>
+                    </div>
+                    <div>
+                        <p className="font-bold text-slate-800 text-sm">Shift Alarm</p>
+                        <p className="text-[10px] text-slate-500 font-medium">Remind me before shift</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    {alarmEnabled && (
+                        <select
+                            value={alarmTime}
+                            onChange={(e) => setAlarmTime(e.target.value)}
+                            className="bg-white/50 border border-white/80 text-xs font-bold text-primary rounded-lg px-2 py-1.5 focus:outline-none shadow-sm"
+                        >
+                            <option value="30">30 Min</option>
+                            <option value="60">1 Hour</option>
+                            <option value="120">2 Hours</option>
+                        </select>
+                    )}
+
+                    {/* Toggle Switch */}
+                    <button
+                        onClick={() => setAlarmEnabled(!alarmEnabled)}
+                        className={`w-11 h-6 rounded-full p-1 transition-colors shadow-inner flex items-center ${alarmEnabled ? 'bg-gradient-to-r from-primary to-accent' : 'bg-slate-300'}`}
+                    >
+                        <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${alarmEnabled ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                    </button>
                 </div>
             </div>
 
