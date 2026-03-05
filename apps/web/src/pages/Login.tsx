@@ -4,12 +4,22 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        // Temporary mock login: Just redirect to dashboard
-        navigate('/');
+        setError('');
+
+        if (email.toLowerCase() === 'admin' && password === '123') {
+            localStorage.setItem('userRole', 'admin');
+            navigate('/');
+        } else if (email.toLowerCase() === 'employee' && password === '123') {
+            localStorage.setItem('userRole', 'employee');
+            navigate('/');
+        } else {
+            setError('Invalid credentials. Use admin/123 or employee/123');
+        }
     };
 
     return (
@@ -37,11 +47,11 @@ export default function Login() {
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
                             <input
                                 id="email"
-                                type="email"
+                                type="text"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary/50 focus:outline-none placeholder:text-slate-400 transition-all font-medium"
-                                placeholder="name@company.com"
+                                placeholder="Username or Email"
                                 required
                             />
                         </div>
@@ -80,6 +90,12 @@ export default function Login() {
                             Remember me for 30 days
                         </label>
                     </div>
+
+                    {error && (
+                        <div className="p-3 text-sm text-red-500 bg-red-100/50 backdrop-blur-md rounded-xl border border-red-200 text-center font-medium">
+                            {error}
+                        </div>
+                    )}
 
                     <button
                         type="submit"

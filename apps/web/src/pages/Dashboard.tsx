@@ -1,14 +1,18 @@
 export default function Dashboard() {
+    const userRole = localStorage.getItem('userRole');
+    const isAdmin = userRole === 'admin';
     return (
         <>
             {/* Overview Row */}
             <section>
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-xl font-bold text-slate-800">Overview</h3>
-                    <button className="btn-gradient px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
-                        <span className="material-symbols-outlined text-sm">add</span>
-                        Create Notice
-                    </button>
+                    {isAdmin && (
+                        <button className="btn-gradient px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
+                            <span className="material-symbols-outlined text-sm">add</span>
+                            Create Notice
+                        </button>
+                    )}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
                     {[

@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, useNavigate } from 'react-router-dom'
 
 const navItems = [
     { label: 'Dashboard', icon: 'dashboard', path: '/' },
@@ -15,6 +15,30 @@ const systemItems = [
 ]
 
 export default function Layout() {
+    const navigate = useNavigate();
+    const userRole = localStorage.getItem('userRole');
+
+    if (!userRole) {
+        return <Navigate to="/login" replace />;
+    }
+
+    const isAdmin = userRole === 'admin';
+
+    const handleLogout = () => {
+        localStorage.removeItem('userRole');
+        navigate('/login');
+    };
+
+    const filteredNavItems = navItems.filter(item => {
+        if (isAdmin) return true;
+        return ['Dashboard', 'Attendance', 'Messages'].includes(item.label);
+    });
+
+    const filteredSystemItems = systemItems.filter(item => {
+        if (isAdmin) return true;
+        return item.label === 'Support';
+    });
+
     return (
         <div className="gradient-bg text-slate-800 font-display min-h-screen relative">
             {/* Decorative blobs */}
@@ -31,7 +55,7 @@ export default function Layout() {
                     </div>
                     <nav className="flex-1 px-4 py-4 space-y-1">
                         <div className="text-[10px] font-bold text-slate-400/80 uppercase tracking-[0.15em] px-3 mb-3">Main Menu</div>
-                        {navItems.map((item) => (
+                        {filteredNavItems.map((item) => (
                             <NavLink
                                 key={item.path}
                                 to={item.path}
@@ -53,7 +77,7 @@ export default function Layout() {
                             </NavLink>
                         ))}
                         <div className="pt-8 text-[10px] font-bold text-slate-400/80 uppercase tracking-[0.15em] px-3 mb-3">System</div>
-                        {systemItems.map((item) => (
+                        {filteredSystemItems.map((item) => (
                             <NavLink
                                 key={item.path}
                                 to={item.path}
@@ -70,7 +94,7 @@ export default function Layout() {
                         ))}
                     </nav>
                     <div className="p-4 border-t border-white/20">
-                        <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 transition-all duration-200 font-medium text-sm">
+                        <button onClick={handleLogout} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 transition-all duration-200 font-medium text-sm">
                             <span className="material-symbols-outlined text-[20px]">logout</span>
                             <span>Logout</span>
                         </button>
@@ -82,7 +106,7 @@ export default function Layout() {
                     {/* Glass Header */}
                     <header className="h-20 glass-strong px-8 flex items-center justify-between sticky top-0 z-10 rounded-b-2xl mx-4 mt-0">
                         <div>
-                            <h2 className="text-xl font-bold text-slate-800">Hello Admin! <span className="text-2xl">👋</span></h2>
+                            <h2 className="text-xl font-bold text-slate-800">Hello {isAdmin ? 'Admin' : 'Employee'}! <span className="text-2xl">👋</span></h2>
                             <p className="text-xs text-slate-500">Welcome back to your dashboard overview.</p>
                         </div>
                         <div className="flex items-center gap-5">
@@ -102,10 +126,10 @@ export default function Layout() {
                             </div>
                             <div className="flex items-center gap-3 pl-4 border-l border-white/30">
                                 <div className="text-right">
-                                    <p className="text-sm font-bold text-slate-800">Admin User</p>
-                                    <p className="text-[10px] text-slate-400 font-medium">HR Manager</p>
+                                    <p className="text-sm font-bold text-slate-800">{isAdmin ? 'Admin User' : 'Employee User'}</p>
+                                    <p className="text-[10px] text-slate-400 font-medium">{isAdmin ? 'HR Manager' : 'Staff'}</p>
                                 </div>
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold shadow-lg shadow-primary/25">A</div>
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold shadow-lg shadow-primary/25">{isAdmin ? 'A' : 'E'}</div>
                             </div>
                         </div>
                     </header>
