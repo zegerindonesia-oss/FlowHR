@@ -7,18 +7,33 @@ export default function Login() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
-        if (email.toLowerCase() === 'admin' && password === '123') {
-            localStorage.setItem('userRole', 'admin');
+        try {
+            const response = await fetch('http://localhost:3001/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email.toLowerCase(), password })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || 'Login failed');
+                return;
+            }
+
+            // Save session
+            localStorage.setItem('userRole', data.user.role);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.user.id);
+
             navigate('/');
-        } else if (email.toLowerCase() === 'employee' && password === '123') {
-            localStorage.setItem('userRole', 'employee');
-            navigate('/');
-        } else {
-            setError('Invalid credentials. Use admin/123 or employee/123');
+        } catch (err) {
+            setError('Unable to connect to server. Please try again later.');
+            console.error(err);
         }
     };
 
