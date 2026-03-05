@@ -1,6 +1,72 @@
+import { useState, useEffect } from 'react';
+
 export default function Dashboard() {
     const userRole = localStorage.getItem('userRole');
     const isAdmin = userRole === 'admin';
+
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        if (!isAdmin) {
+            const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+            return () => clearInterval(timer);
+        }
+    }, [isAdmin]);
+
+    if (!isAdmin) {
+        return (
+            <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+                {/* Greeting & Date */}
+                <div className="text-center mt-2">
+                    <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-1">
+                        {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                    </p>
+                    <h1 className="text-5xl font-extrabold text-slate-800 tracking-tight tabular-nums drop-shadow-sm">
+                        {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                    </h1>
+                </div>
+
+                {/* Clock In Button Action */}
+                <div className="relative flex justify-center py-6">
+                    {/* Pulsing rings behind button */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-48 h-48 bg-primary/20 rounded-full animate-ping opacity-75" style={{ animationDuration: '3s' }}></div>
+                        <div className="absolute w-40 h-40 bg-accent/20 rounded-full animate-ping opacity-75" style={{ animationDuration: '3s', animationDelay: '1s' }}></div>
+                    </div>
+
+                    <button className="relative z-10 w-40 h-40 rounded-full bg-gradient-to-tr from-primary via-purple-500 to-accent text-white shadow-[0_10px_40px_rgba(124,58,237,0.5)] flex flex-col items-center justify-center gap-2 transform transition-transform active:scale-95 hover:scale-105 border-4 border-white">
+                        <span className="material-symbols-outlined text-[40px] drop-shadow-md">fingerprint</span>
+                        <span className="font-extrabold tracking-wider text-lg drop-shadow-md">CLOCK IN</span>
+                    </button>
+                </div>
+
+                {/* Status Cards */}
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <span className="material-symbols-outlined text-emerald-500 mb-2 bg-emerald-50 w-10 h-10 flex items-center justify-center rounded-xl">schedule</span>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Shift Start</p>
+                        <p className="text-lg font-extrabold text-slate-800">09:00</p>
+                    </div>
+                    <div className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <span className="material-symbols-outlined text-rose-500 mb-2 bg-rose-50 w-10 h-10 flex items-center justify-center rounded-xl">update</span>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Shift End</p>
+                        <p className="text-lg font-extrabold text-slate-800">17:00</p>
+                    </div>
+                </div>
+
+                {/* Info Card */}
+                <div className="glass-card p-5 rounded-2xl mt-2 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent/20 to-transparent rounded-bl-full -z-10"></div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <span className="material-symbols-outlined text-accent">campaign</span>
+                        <h3 className="font-bold text-slate-800">Company Notice</h3>
+                    </div>
+                    <p className="text-sm text-slate-600 font-medium">Please be informed that there will be a townhall meeting tomorrow at 10 AM. All employees are expected to attend.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             {/* Overview Row */}
