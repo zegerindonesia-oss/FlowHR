@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://flow-hr-liard.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://flow-hr-liard.vercel.app'],
     credentials: true, // required by better-auth for cookies
 }));
 app.use(express.json());
