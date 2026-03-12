@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3001",
     basePath: "/api/auth",
-    trustedOrigins: ["http://localhost:5173", "https://flow-hr-liard.vercel.app"],
+    trustedOrigins: ["http://localhost:5173", "http://localhost:5174", "https://flow-hr-liard.vercel.app"],
     database: drizzleAdapter(db, {
         provider: "pg",
         schema: {
