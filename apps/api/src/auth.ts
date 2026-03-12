@@ -13,14 +13,17 @@ export const auth = betterAuth({
     trustedOrigins: ["http://localhost:5173", "http://localhost:5174", "https://flow-hr-liard.vercel.app"],
     database: drizzleAdapter(db, {
         provider: "pg",
-        schema: {
-            // Mapping better-auth to our Drizzle tables
-            user: schema.user,
-            session: schema.session,
-            account: schema.account,
-            verification: schema.verification
-        }
+        schema: schema,
     }),
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                required: false,
+                defaultValue: "employee",
+            }
+        }
+    },
     emailAndPassword: {
         enabled: true
     }
