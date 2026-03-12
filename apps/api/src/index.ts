@@ -1,10 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.routes';
+import { auth } from './auth';
+import { toNodeHandler } from 'better-auth/node';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -21,7 +22,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Better Auth routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', toNodeHandler(auth));
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
