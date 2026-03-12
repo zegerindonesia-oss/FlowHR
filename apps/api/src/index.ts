@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Adjust this to match your vite frontend exactly (including port)
+    origin: ['http://localhost:5173', 'https://flow-hr-liard.vercel.app'],
     credentials: true, // required by better-auth for cookies
 }));
 app.use(express.json());
